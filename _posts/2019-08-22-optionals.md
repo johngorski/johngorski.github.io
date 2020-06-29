@@ -3,11 +3,13 @@ layout: post
 title: "Principles of using Java Optionals | John Gorski"
 ---
 
+# Principles of using Java Optionals
+
 Java 8's Optional is a nuanced beast. Depending on code you read that uses it, you may be an acolyte or you might never want to touch Java 8's functional programming libraries again. Here's how you write code that gets readers into the first category rather than the second.
 
 Optionals help us devote less of our code to avoiding NullPointerExceptions and give us elegant ways to consume function results which may be empty.
 
-# Avoiding NPEs Before Optionals: The Null Object pattern
+## Avoiding NPEs Before Optionals: The Null Object pattern
 
 Our wonderful computer programming skills are meant for a greater purpose than null checks.
 
@@ -68,7 +70,7 @@ Pretty neat! The fraction of our client code devoted to what we want to happen i
 
 Our first example also required us to come up with an effective name for our variable to hold the returned reference from our getThingDoer() call. Since we don't need that in our second example, we don't need to argue what would be an effective and appropriate name during code review. Woo hoo!
 
-# Optionals making us happy: This method will not return a result in all cases
+## Optionals making us happy: This method will not return a result in all cases
 
 So that was fun! We got rid of the null check burden for our client calls, and we haven't even talked about Optionals yet. In the last case, we had control over the behavior of the method getDoer(), and it was reasonable for us to change the contract. These conditions aren't always true.
 
@@ -90,7 +92,7 @@ Optional.ofNullable(getThingDoer())
 
 Saving that source of friction is reason enough to adopt the Optional version of the code when we can't stop getDoer() from having a nullable return type. It turns out that Optionals let us do even more than that.
 
-# No longer Optional: Coping with emptiness
+## No longer Optional: Coping with emptiness
 
 Invoking a procedure is only one thing we might want to do with an object which may or may not be present. Often the possibly-absent value is part of a longer calculation. At some point, we need our `Optional<T>` to become a `T` (Java's type-checker will stop us otherwise). If we look at the nullable value case, we have a few different choices for when the value is missing:
 
@@ -136,7 +138,7 @@ final Employee demoDayOrganizer = getDemoDayVolunteer()
 
 Our Supplier is invoked only when we don't already have a value. That's better.
 
-## Emptiness as a Problem
+### Emptiness as a Problem
 
 When our program can't continue when an Optional value isn't available, we can use orElseThrow() to give up.
 
@@ -151,7 +153,7 @@ If the exception you're throwing is a NullPointerException, you can use .get() i
 
 Notice how having an Optional return type doesn't force a client into a particular way of handling an empty result. Throwing a DemoDayCanceled exception from getDemoDayVolunteer() isn't always what we want.
 
-# Let's get some lunch
+## Let's get some lunch
 
 Going out to lunch is delicious, but choosing where is hard. I'll usually go with the group when there is a decision, but I'll skip Veggie Grill. Other than that, I don't have a strong preference. Let's say Seattle passes a law that if I don't have a decision, I need to eat at Hurry Curry.
 
@@ -178,7 +180,7 @@ final String johnsLunch = getGroupDecision()
 
 Hooray!
 
-# Just passing through...
+## Just passing through...
 
 Has this ever happened to you?
 
@@ -220,7 +222,7 @@ Our new method's body takes 5 vertical lines rather than 11 while avoiding nesti
 
 We're still paying forward the burden of further null checks by returning null when nothing is available. We can end the madness by returning `Optional<Costume>` instead of Costume removing the orElse() call at the end of the train.
 
-## What about when my mapping function's return type is also Optional?
+### What about when my mapping function's return type is also Optional?
 
 In the above example, the methods map() was using still had nullable return types. What if these methods were written with Optional return types instead, to show they might not return a value? We run into trouble right away:
 
@@ -246,15 +248,15 @@ Functions passed into Optional's flatMap() method must have an Optional return t
 
 flatMap() situations tend to bend the mind a little bit more. It's hard to get a feel for when they're needed until you've seen them in the wild a few times. For today, just remember that flatMap() exists if you run into situations where types start to look nested: `Optional<Optional<Optional<...>>>`. To flatten a situation you reached from using map(), think flatMap().
 
-## Alternatives to the others
+### Alternatives to the others
 
 java.util.Optional has other methods, but you shouldn't need them. If you think you do, often you'll find that you're missing one of the features which Optional already affords us.
 
-### get() / isPresent()
+#### get() / isPresent()
 
 get() is basically the same as orElseThrow(NullPointerException::new). The uninitiated will sometimes use isPresent() to avoid this NPE. If orElse()/orElseGet()/ifPresent() don't seem to be fitting your needs and you still find yourself reaching for get() and isPresent(), it might be a good time to get a second pair of eyes on the issue.
 
-### Optional.of() / Optional.empty()
+#### Optional.of() / Optional.empty()
 
 Optional.of(null) throws a NullPointerException. In most cases, what you'll want instead is Optional.ofNullable() to transition from computations with null checks to computations with Optionals instead.
 
@@ -274,7 +276,7 @@ public Optional<Bagel> myOrder() {
 }
 ```
 
-# Code structure alternatives to putting Optionals elsewhere than as a method's return type
+## Code structure alternatives to putting Optionals elsewhere than as a method's return type
 
 > ⚠️  WARNING: Outside of method return types, Optionals tend to increase code complexity rather than decrease it.
 
@@ -286,11 +288,11 @@ It's worth considering if the difficulty coming up with a name for a thing is it
 
 Let's discuss.
 
-## Local variable
+### Local variable
 
 Optionals should be handled once each, at the earliest convenience. Needing to hold an Optional in a local variable, to be referred to at multiple times or handled in different ways, is a sign your method is probably doing too much (more than "one thing").
 
-## Method parameter
+### Method parameter
 
 ```java
 // Don't do this.
@@ -329,7 +331,7 @@ final Result r = lookForABaz()
 
 That's what. It's not foo()'s fault that her callers don't know if they have a Baz or not.
 
-## Class field
+### Class field
 
 ```java
 // Also bad
@@ -396,7 +398,7 @@ public MyClass {
 }
 ```
 
-## Constants
+### Constants
 
 ```java
 // Our talk on not having `Constants` classes will need to happen another day.
@@ -407,7 +409,7 @@ public class Constants {
 
 If your constant needs to be referenced from so many different places in your code, those references will also have to handle whether it's null. That's a lot to ask. It's time to ask yourself if the idea you're trying to express in the code really needs to be a constant.
 
-# Summing up
+## Summing up
 
 If you can use the Null Object pattern, you can avoid both null checks and Optionals!
 
@@ -438,7 +440,7 @@ Otherwise....
 
 👉 You should never need to name an Optional instance.
 
-# References
+## References
 
 * [java.util.Optional documentation](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html)
 * [*Effective Java*, 3rd edition](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/)
