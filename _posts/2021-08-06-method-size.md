@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "On Shrinking Large Methods | John Gorski"
+title: "On Shrinking Large Methods"
 ---
 
 # How big is too big?
