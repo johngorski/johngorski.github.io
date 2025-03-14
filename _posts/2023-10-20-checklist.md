@@ -137,3 +137,40 @@ Take care to avoid unprincipled additions to the checklist. It's tempting, maybe
 
 Finally, keep the list short enough to use.
 
+## As Markdown
+
+```
+Before publishing a pull request:
+1. Modify the following to include either ✅ or ❌ next to each item to indicate that it does or doesn't apply, respectively.
+2. For each ❌, provide rationale for why you are deviating from the checklist.
+3. Remove this portion, above `---`, before publishing, as well.
+
+Find rationale for individual checklist items [here](https://johngorski.github.io/2023/10/20/checklist.html).
+
+---
+
+Commit messages
+- ❌✅ My commit messages describe the software’s new behavior.
+- ❌✅ My commit descriptions explain the reason for the change.
+
+Tests
+- ❌✅ I have protected new system assumptions with tests, each named for the assumption it protects.
+- ❌✅ I have seen each new test fail when the assumption it protects is violated.
+- ❌✅ My test code and production code follow the same code cleanliness standards.
+- ❌✅ I wrote my tests at the cheapest layer which can falsify their protected assumptions.
+
+Compounding value
+- ❌✅ I have not introduced unnecessary mutable state.
+
+Brevity
+- ❌✅ My comments refer to the code’s current state, not its anticipated evolution.
+- ❌✅ I have removed tests which protect obsolete assumptions.
+- ❌✅ I have removed code not covered by the test suite.
+- ❌✅ I have not allowed a characteristic of the system to be encoded more than once.
+- ❌✅ I have defined variables at the smallest scope from which they are referenced.
+
+Deployment discipline
+- ❌✅ I will monitor the propagation of this change to all deployment destinations.
+- ❌✅ If there is a problem during deployment related to this change, I will push a revert commit first and then diagnose the error locally.
+```
+
