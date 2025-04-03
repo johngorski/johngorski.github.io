@@ -1,0 +1,10 @@
+#!/bin/bash
+filename=`date +%Y-%m-%d-$1.md`
+
+cat > _posts/$filename <<EOF
+---
+layout: post
+title: $1
+---
+EOF
+
